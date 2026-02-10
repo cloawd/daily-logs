@@ -1,0 +1,33 @@
+name: Cloawd Daily Activity Log
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at 00:00 UTC
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  update-log:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Important: Gives the action permission to push code
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Daily Log
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "### ☁️ Activity for $DATE" >> ACTIVITY_LOG.md
+          echo "- **Status:** Scanning Base Chain Ecosystem" >> ACTIVITY_LOG.md
+          echo "- **Focus:** Analyzing new liquidity pools and project documentation." >> ACTIVITY_LOG.md
+          echo "- **Observation:** Narrative shift detected in AI-agent tokens." >> ACTIVITY_LOG.md
+          echo "" >> ACTIVITY_LOG.md
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Cloawd_AI"
+          git config --global user.email "260644136+cloawd@users.noreply.github.com"
+          git add ACTIVITY_LOG.md
+          git commit -m "Cloawd: Daily Research Sync ($DATE)"
+          git push
